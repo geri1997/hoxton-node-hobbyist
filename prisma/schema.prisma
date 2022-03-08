@@ -21,7 +21,7 @@ model User {
 
 model Hobby {
   id        Int         @id @default(autoincrement())
-  name      String
+  name      String      @unique
   image     String
   active    Int
   users UserHobby[]

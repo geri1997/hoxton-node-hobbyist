@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id        Int         @id @default(autoincrement())
+  id        Int         @id @default(autoincrement()) 
   fullName  String
   photo     String
   email     String      @unique
@@ -29,9 +29,9 @@ model Hobby {
 
 model UserHobby {
   id      Int   @id @default(autoincrement())
-  hobby   Hobby @relation(fields: [hobbyId], references: [id])
-  user    User  @relation(fields: [userId], references: [id])
-  hobbyId Int
+  hobby   Hobby @relation(fields: [hobbyId], references: [id], onDelete: Cascade) 
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hobbyId Int 
   userId  Int
 }
 

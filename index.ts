@@ -43,9 +43,9 @@ app.post('/users', async (req, res) => {
 });
 
 app.post('/hobbies', async (req, res) => {
-   const { fullName, photo, email } = req.body;
+   const { name,image,active } = req.body;
 
-   res.send(await prisma.user.create({ data: { fullName, photo, email } }));
+   res.send(await prisma.hobby.create({ data: { name,image,active } }));
 });
 
 app.post('/assign-hobby', async (req, res) => {
@@ -61,12 +61,25 @@ app.post('/assign-hobby', async (req, res) => {
    const exists = await prisma.userHobby.findFirst({
       where: { AND: [{ userId: userId }, { hobbyId: hobby.id }] },
    });
-   if(exists)return res.send('This user already has this hobby assigned.')
+   if (exists) return res.send('This user already has this hobby assigned.');
    res.send(
       await prisma.userHobby.create({
          data: { userId: userId, hobbyId: hobby.id },
       })
    );
+});
+
+app.post('/delete-userHobby', async (req, res) => {
+   const { userId, hobbyId } = req.body;
+   res.send(await prisma.userHobby.delete({
+      where: {
+         id: (
+            await prisma.userHobby.findFirst({
+               where: { AND: [{ userId: userId }, { hobbyId: hobbyId }] },
+            })
+         )?.id,
+      },
+   }))
 });
 
 app.listen(3009, () => {
